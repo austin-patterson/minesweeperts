@@ -1,0 +1,34 @@
+{
+  "name": "minesweeperts",
+  "version": "1.0.0",
+  "description": "A minesweeper game for node written in TypeScript",
+  "main": "build/dist.js",
+  "scripts": {
+    "test": "test",
+    "build": "tsc",
+    "watch": "tsc -w",
+    "dev": "nodemon -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/austin-patterson/minesweeperts.git"
+  },
+  "keywords": [
+    "minesweeper",
+    "typescript",
+    "game",
+    "node"
+  ],
+  "author": "austin-patterson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/austin-patterson/minesweeperts/issues"
+  },
+  "homepage": "https://github.com/austin-patterson/minesweeperts#readme",
+  "dependencies": {
+    "typescript": "^4.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}

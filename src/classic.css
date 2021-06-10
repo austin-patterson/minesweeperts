@@ -1,0 +1,110 @@
+#ms-board {
+  background-color: #c0c0c0;
+  border: 2pt #606060;
+  margin: 10px;
+  padding: 20px;
+  width: 192px;
+}
+
+.ms-header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0;
+}
+
+.ms-num-display {
+  display: flex;
+  justify-content: center;
+  width: 39px;
+}
+
+.ms-field {
+  display: grid;
+  height: 160px;
+  width: 160px;
+}
+
+/* Sprites */
+.ms-cell {
+  background: url("../resources/classic.png") no-repeat;
+  height: 16px;
+  width: 16px;
+}
+
+.ms-cell.ms-hidden {
+  background-position: 0 -51px;
+}
+
+.ms-btn {
+  background: url("../resources/classic.png") no-repeat;
+  height: 26px;
+  width: 26px;
+}
+
+.ms-smiley {
+  background-position: 0 -24px;
+}
+
+.ms-smiley-pressed {
+  background-position: -27px -24px;
+}
+
+.ms-wow {
+  background-position: -54px -24px;
+}
+
+.ms-sunny {
+  background-position: -81px -24px;
+}
+
+.ms-dead {
+  background-position: -108px -24px;
+}
+
+.ms-digit {
+  background: url("../resources/classic.png") no-repeat;
+  height: 23px;
+  width: 13px;
+}
+
+.ms-0 {
+  background-position: -126px 0;
+}
+
+.ms-1 {
+  background-position: -126px 0;
+}
+
+.ms-2 {
+  background-position: -126px 0;
+}
+
+.ms-3 {
+  background-position: -126px 0;
+}
+
+.ms-4 {
+  background-position: -126px 0;
+}
+
+.ms-5 {
+  background-position: -126px 0;
+}
+
+.ms-6 {
+  background-position: -126px 0;
+}
+
+.ms-7 {
+  background-position: -126px 0;
+}
+
+.ms-8 {
+  background-position: -126px 0;
+}
+
+.ms-9 {
+  background-position: -126px 0;
+}

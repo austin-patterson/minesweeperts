@@ -235,12 +235,10 @@ class Game {
     const genField = () => {
       let field: HTMLDivElement = document.createElement("div");
 
+      // ! TODO: Try unpacking this into explicit loops? Only creating 1 element...
       this.board = new Array(this.numRows).fill(0).map((r, i) =>
         new Array(this.numCols).fill(0).map((c, j) => {
-          // let cell: Cell = new Cell(i, j);
-          let cell: Cell = document.createElement("ms-cell") as Cell;
-          cell.row = i;
-          cell.col = j;
+          let cell: Cell = new Cell(i, j);
           cell.classList.add("ms-cell", "ms-hidden", "classic");
           cell.onmousedown = this.toggleCellPressed;
           cell.onmouseup = this.toggleCellPressed;

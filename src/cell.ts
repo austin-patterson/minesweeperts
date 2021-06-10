@@ -1,4 +1,4 @@
-class Cell extends HTMLDivElement {
+class Cell extends HTMLElement {
   row: number;
   col: number;
   val: number = 0;

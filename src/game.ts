@@ -112,10 +112,10 @@ class Game {
       typeof (current = queue.shift()) !== "undefined"
     ) {
       // TODO: update display
-      current.hidden = false;
+      current.revealed = true;
       if (current.val === 0) {
         for (let n of this.getNeighbors(origin)) {
-          if (n.hidden) queue.push(n);
+          if (n.revealed) queue.push(n);
         }
       }
     }
@@ -181,8 +181,8 @@ class Game {
   // TODO: toggle ms-cell-pressed
   toggleCellPressed(event: MouseEvent) {
     if (event == null) return;
-    this.btn.classList.toggle("ms-smiley");
-    this.btn.classList.toggle("ms-wow");
+    this.btn?.classList.toggle("ms-smiley");
+    this.btn?.classList.toggle("ms-wow");
 
     if (event.button === 0) {
       //left click
@@ -193,9 +193,9 @@ class Game {
   }
 
   toggleBtnPressed(event: MouseEvent) {
-    if (event.button !== 0) return;
-    this.btn.classList.toggle("ms-smiley");
-    this.btn.classList.toggle("ms-smiley-pressed");
+    // if (event.button !== 0) return;
+    this.btn?.classList.toggle("ms-smiley");
+    this.btn?.classList.toggle("ms-smiley-pressed");
   }
 
   init(): void {
@@ -220,10 +220,10 @@ class Game {
 
       this.btn.onmousedown = this.toggleBtnPressed;
       this.btn.onmouseup = this.toggleBtnPressed;
-      this.btn.onmouseleave = (event: MouseEvent) => {
-        if (this.btn.classList.contains("ms-smiley-pressed"))
-          this.toggleBtnPressed(event);
-      };
+      // this.btn.onmouseleave = (event: MouseEvent) => {
+      //   if (this.btn.classList.contains("ms-smiley-pressed"))
+      //     this.toggleBtnPressed(event);
+      // };
 
       header.appendChild(this.flagCounter);
       header.appendChild(this.btn);
@@ -242,10 +242,10 @@ class Game {
           cell.classList.add("ms-cell", "ms-hidden", "classic");
           cell.onmousedown = this.toggleCellPressed;
           cell.onmouseup = this.toggleCellPressed;
-          cell.onmouseleave = (event: MouseEvent) => {
-            if (cell.classList.contains("ms-cell-pressed"))
-              this.toggleCellPressed(event);
-          };
+          // cell.onmouseleave = (event: MouseEvent) => {
+          //   if (cell.classList.contains("ms-cell-pressed"))
+          //     this.toggleCellPressed(event);
+          // };
           cell.onclick = () => game.reveal(cell);
           field.appendChild(cell);
           return cell;

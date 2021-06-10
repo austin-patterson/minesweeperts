@@ -2,7 +2,7 @@ class Cell extends HTMLElement {
   row: number;
   col: number;
   val: number = 0;
-  hidden: boolean = true;
+  revealed: boolean = false;
   flagged: boolean = false;
 
   constructor(row: number, col: number) {

@@ -1,30 +1,24 @@
 class Game {
-  board: Cell[][];
-  mines: any = {};
+  board!: Cell[][];
+  mines: any = {}; // TODO: how am I using this?
+  flags: any = {}; // TODO: how am I using this?
   clock: number = 0;
   numFlags: number = 0;
-  numRows: number;
-  numCols: number;
-  numMines: number;
+  flagCounter!: HTMLDivElement;
+  btn!: HTMLDivElement;
+  timer!: HTMLDivElement;
 
-  constructor(numRows: number, numCols: number, numMines: number) {
-    this.board = new Array(numRows)
-      .fill(0)
-      .map((r, i) =>
-        new Array(numCols).fill(0).map((c, j) => new Cell(i, j, this))
-      );
+  constructor(
+    private numRows: number,
+    private numCols: number,
+    private numMines: number
+  ) {
     this.numFlags = 0;
     this.clock = 0;
-    this.numMines = numMines;
-    this.numRows = numRows;
-    this.numCols = numCols;
-
-    this.populate();
-    // console.log(this.printBoard()); //DEBUG
   }
 
   // Populate the game board with mines and numbers around those mines
-  populate(): void {
+  populateMines(): void {
     let x: number;
     let y: number;
     for (let i = 0; i < this.numMines; i++) {
@@ -113,9 +107,10 @@ class Game {
     let queue: Cell[] = [origin];
     let current: Cell | undefined;
 
-    while (queue.length > 0) {
-      current = queue.shift();
-      if (typeof current === "undefined") break; //FIXME: find a more elegant solution
+    while (
+      queue.length > 0 &&
+      typeof (current = queue.shift()) !== "undefined"
+    ) {
       // TODO: update display
       current.hidden = false;
       if (current.val === 0) {
@@ -126,57 +121,144 @@ class Game {
     }
   }
 
-  // Setup event listeners? Draw board into dev.minesweeper-board
+  /**
+  genHeader(): HTMLDivElement {
+    let header: HTMLDivElement = document.createElement("div");
+    this.flagCounter = document.createElement("div");
+    this.btn = document.createElement("div");
+    this.timer = document.createElement("div");
+
+    this.flagCounter.innerHTML = `<div class="classic ms-digit ms-0"></div><div class="classic ms-digit ms-0"></div><div class="classic ms-digit ms-0"></div>`;
+    this.timer.innerHTML = `<div class="classic ms-digit ms-0"></div><div class="classic ms-digit ms-0"></div><div class="classic ms-digit ms-0"></div>`;
+
+    this.flagCounter.classList.add("ms-num-display");
+    this.timer.classList.add("ms-num-display");
+    this.btn.classList.add("ms-btn", "ms-smiley", "classic");
+    header.classList.add("ms-header");
+
+    this.btn.onmousedown = this.toggleBtnPressed;
+    this.btn.onmouseup = this.toggleBtnPressed;
+    this.btn.onmouseleave = (event: MouseEvent) => {
+      if (this.btn.classList.contains("ms-smiley-pressed"))
+        this.toggleBtnPressed(event);
+    };
+
+    header.appendChild(this.flagCounter);
+    header.appendChild(this.btn);
+    header.appendChild(this.timer);
+
+    return header;
+  }
+  */
+
+  /**
+  genField(): HTMLDivElement {
+    let field: HTMLDivElement = document.createElement("div");
+
+    this.board = new Array(this.numRows).fill(0).map((r, i) =>
+      new Array(this.numCols).fill(0).map((c, j) => {
+        let cell: Cell = new Cell(i, j);
+        cell.classList.add("ms-cell", "ms-hidden", "classic");
+        cell.onmousedown = this.toggleCellPressed;
+        cell.onmouseup = this.toggleCellPressed;
+        cell.onmouseleave = (event: MouseEvent) => {
+          if (cell.classList.contains("ms-cell-pressed"))
+            this.toggleCellPressed(event);
+        };
+        cell.onclick = () => game.reveal(cell);
+        field.appendChild(cell);
+        return cell;
+      })
+    );
+
+    field.classList.add("ms-field");
+    return field;
+  }
+  */
+
+  // Event Handlers
+  // TODO: check for left (event.button === 0) vs right (event.button === 2)
+  // TODO: toggle ms-cell-pressed
+  toggleCellPressed(event: MouseEvent) {
+    if (event == null) return;
+    this.btn.classList.toggle("ms-smiley");
+    this.btn.classList.toggle("ms-wow");
+
+    if (event.button === 0) {
+      //left click
+      let cell: Cell = event?.target as Cell;
+      cell.classList.toggle("ms-hidden");
+      cell.classList.toggle("ms-cell-pressed");
+    }
+  }
+
+  toggleBtnPressed(event: MouseEvent) {
+    if (event.button !== 0) return;
+    this.btn.classList.toggle("ms-smiley");
+    this.btn.classList.toggle("ms-smiley-pressed");
+  }
+
   init(): void {
     let root: HTMLElement | null = document.getElementById("ms-board");
     if (root == null) return;
-    let field: HTMLDivElement = document.createElement("div");
-    let header: HTMLDivElement = document.createElement("div");
-    let flagCounter: HTMLDivElement = document.createElement("div");
-    let btn: HTMLDivElement = document.createElement("div");
-    let timer: HTMLDivElement = document.createElement("div");
 
-    // EventListeners
-    // Btn handlers
-    const toggleWow = () => {
-      btn.classList.toggle("ms-smiley");
-      btn.classList.toggle("ms-wow");
+    customElements.define("ms-cell", Cell);
+
+    const genHeader = () => {
+      let header: HTMLDivElement = document.createElement("div");
+      this.flagCounter = document.createElement("div");
+      this.btn = document.createElement("div");
+      this.timer = document.createElement("div");
+
+      this.flagCounter.innerHTML = `<div class="classic ms-digit ms-0"></div><div class="classic ms-digit ms-0"></div><div class="classic ms-digit ms-0"></div>`;
+      this.timer.innerHTML = `<div class="classic ms-digit ms-0"></div><div class="classic ms-digit ms-0"></div><div class="classic ms-digit ms-0"></div>`;
+
+      this.flagCounter.classList.add("ms-num-display");
+      this.timer.classList.add("ms-num-display");
+      this.btn.classList.add("ms-btn", "ms-smiley", "classic");
+      header.classList.add("ms-header");
+
+      this.btn.onmousedown = this.toggleBtnPressed;
+      this.btn.onmouseup = this.toggleBtnPressed;
+      this.btn.onmouseleave = (event: MouseEvent) => {
+        if (this.btn.classList.contains("ms-smiley-pressed"))
+          this.toggleBtnPressed(event);
+      };
+
+      header.appendChild(this.flagCounter);
+      header.appendChild(this.btn);
+      header.appendChild(this.timer);
+
+      return header;
     };
 
-    const toggleBtnPressed = () => {
-      btn.classList.toggle("ms-smiley");
-      btn.classList.toggle("ms-smiley-pressed");
+    const genField = () => {
+      let field: HTMLDivElement = document.createElement("div");
+
+      this.board = new Array(this.numRows).fill(0).map((r, i) =>
+        new Array(this.numCols).fill(0).map((c, j) => {
+          // let cell: Cell = new Cell(i, j);
+          let cell: Cell = document.createElement("ms-cell") as Cell;
+          cell.row = i;
+          cell.col = j;
+          cell.classList.add("ms-cell", "ms-hidden", "classic");
+          cell.onmousedown = this.toggleCellPressed;
+          cell.onmouseup = this.toggleCellPressed;
+          cell.onmouseleave = (event: MouseEvent) => {
+            if (cell.classList.contains("ms-cell-pressed"))
+              this.toggleCellPressed(event);
+          };
+          cell.onclick = () => game.reveal(cell);
+          field.appendChild(cell);
+          return cell;
+        })
+      );
+
+      field.classList.add("ms-field");
+      return field;
     };
-    btn.onmousedown = toggleBtnPressed;
-    btn.onmouseup = toggleBtnPressed;
 
-    // Move toggleWow functionality into here and figure out how to connect this
-    // const toggleCellPressed = () => {};
-
-    // Build Header
-    flagCounter.innerHTML = `<div class="ms-digit ms-0"></div><div class="ms-digit ms-0"></div><div class="ms-digit ms-0"></div>`;
-    timer.innerHTML = `<div class="ms-digit ms-0"></div><div class="ms-digit ms-0"></div><div class="ms-digit ms-0"></div>`;
-    flagCounter.classList.add("ms-num-display");
-    timer.classList.add("ms-num-display");
-    btn.classList.add("ms-btn", "ms-smiley");
-    header.classList.add("ms-header");
-    header.appendChild(flagCounter);
-    header.appendChild(btn);
-    header.appendChild(timer);
-
-    // Build Field
-    for (let i = 0; i < this.numCols * this.numRows; i++) {
-      let div = document.createElement("div");
-      div.classList.add("ms-cell", "ms-hidden");
-      // div.onclick(/** TODO */)
-      div.onmousedown = toggleWow;
-      div.onmouseup = toggleWow;
-      field.appendChild(div);
-      console.log("test");
-    }
-    field.classList.add("ms-field");
-
-    root.appendChild(header);
-    root.appendChild(field);
+    root.appendChild(genHeader());
+    root.appendChild(genField());
   }
 }

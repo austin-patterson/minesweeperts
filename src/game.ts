@@ -253,6 +253,12 @@ class Game {
       );
 
       field.classList.add("ms-field");
+      field.style.gridTemplateColumns =
+        "auto auto auto auto auto auto auto auto auto auto";
+      field.style.gridTemplateRows =
+        "auto auto auto auto auto auto auto auto auto auto";
+      field.style.maxHeight = "160px";
+      field.style.maxWidth = "160px";
       return field;
     };
 
